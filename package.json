@@ -2,7 +2,7 @@
   "name": "start",
   "displayName": "start",
   "description": "Start working on your project as soon the vscode get opened.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/Equibre/.start.git"

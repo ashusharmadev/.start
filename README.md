@@ -16,9 +16,9 @@ This is a Visual Studio Code (VSCode) extension that automatically starts your p
 
 ## Usage
 
-1. Create a `.start` file in the root folder of your project.
-2. In the `.start` file, add the commands you want to run, with each command on a new line, prefixed with `\t`. For example:
-3. Open the project in VSCode, and press `Ctrl+Shift+X` (Windows/Linux) or `Cmd+Shift+X` (Mac) and then choose `Boot .start` command to start it.
+1. Create a `.start` file in the root folder of your project or you can create multiple .startYourProjectName files.
+2. In the `.start` or `.startYourProjectName` files, add the commands you want to run, with each command on a new line, prefixed with `\t`. For example: `\t cd server, source venv/bin/activate, python app.py`
+3. Open the project in VSCode, and press `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (Mac) and then choose `Boot .start` or `Boot .startYourProjectName` command to start it.
 
 ## Example `.start` file
 

@@ -9,3 +9,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Added support to parse .start file
 - Supports multiple terminal
 - Added support to run multiple commands in same terminal
+
+## 0.0.2
+
+- Added support to parse for multiple .start file
