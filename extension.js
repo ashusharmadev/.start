@@ -1,13 +1,6 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-const vscode = require("vscode");
+const vscode = require('vscode');
 const fs = require("fs");
 const path = require("path");
-
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
-
-const START_FILE_NAME = ".start";
 
 function executeCommands(commands) {
   for (const commandGroup of commands) {
@@ -19,12 +12,11 @@ function executeCommands(commands) {
   }
 }
 
-function parseStartFile(rootFolder) {
-  const startFilePath = path.join(rootFolder, START_FILE_NAME);
+function parseStartFile(startFilePath) {
   fs.readFile(startFilePath, "utf8", (err, data) => {
     if (err) {
       vscode.window.showErrorMessage(
-        "Can't locate .start file in project root."
+        "Can't locate provided .start file."
       );
       return;
     }
@@ -43,42 +35,69 @@ function parseStartFile(rootFolder) {
   });
 }
 
-/**
- * @param {vscode.ExtensionContext} context
- */
+function getWorkspaceRoot() {
+  const workspaceFolders = vscode.workspace.workspaceFolders;
+  if (workspaceFolders && workspaceFolders.length > 0) {
+    return workspaceFolders[0].uri.fsPath;
+  }
+  return null;
+}
+
+function searchStartFiles(rootFolder) {
+  vscode.workspace.findFiles('**/.start*', '**/node_modules/**', 10).then(files => {
+    if (files.length > 0) {
+      const commandItems = files.map(file => {
+        const fileName = path.basename(file.fsPath);
+        const commandSuffix = fileName.substring('.start'.length); // Extract string after .start
+        const commandId = `extension.openStart${commandSuffix}`;
+
+        return {
+          label: `Open ${(commandSuffix || "").trim().length > 0 ? commandSuffix.trim() : fileName}`,
+          description: `Open ${fileName}`,
+          commandId: commandId,
+          filePath: file.fsPath
+        };
+      });
+
+      if (commandItems.length === 1) {
+        parseStartFile(commandItems[0].filePath);
+      }
+      else {
+        vscode.window.showQuickPick(commandItems, {
+          placeHolder: 'Select a .start file to open'
+        }).then(selected => {
+          if (selected) {
+            parseStartFile(selected.filePath);
+          }
+        });
+      }
+    } else {
+      vscode.window.showInformationMessage("No files starting with .start found in the workspace.");
+    }
+  });
+}
+
 function activate(context) {
+
   let disposable = vscode.commands.registerCommand(
     "start.bootProject",
     function () {
-      // console.log("Starting....")
-      const activeEditor = vscode.window.activeTextEditor;
-      if (activeEditor) {
-        // console.log("Acitve Editor URI :: ", activeEditor.document.uri)
-        const workspaceRoot = vscode.workspace.getWorkspaceFolder(activeEditor.document.uri);
-        // parseStartFile(path.dirname(activeEditor.document.uri.fsPath));
-        // console.log("Workspace root :: ", workspaceRoot, ", Path :: ", workspaceRoot.uri.fsPath);
-        parseStartFile(workspaceRoot.uri.fsPath);
-      } else {
-        vscode.window.showInformationMessage("No active editor found.");
-      } 
+      const workspaceRoot = getWorkspaceRoot();
+      if (workspaceRoot) {
+        searchStartFiles(workspaceRoot);
+      }
+      else {
+        vscode.window.showInformationMessage("No workspace found.");
+      }
     }
   );
-
-  // context.subscriptions.push(
-  //   vscode.workspace.onDidChangeWorkspaceFolders((event) => {
-  //     if (event.added.length > 0) {
-  //       parseStartFile(event.added[0].uri.fsPath);
-  //     }
-  //   })
-  // );
 
   context.subscriptions.push(disposable);
 }
 
-// This method is called when your extension is deactivated
-function deactivate() {}
+function deactivate() { }
 
 module.exports = {
   activate,
-  deactivate,
+  deactivate
 };

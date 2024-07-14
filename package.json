@@ -16,6 +16,7 @@
   ],
   "activationEvents": [],
   "main": "./extension.js",
+  "icon": "logo.png",
   "contributes": {
     "commands": [{
       "command": "start.bootProject",
