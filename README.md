@@ -38,4 +38,4 @@ If you have any feedback, suggestions, or want to contribute to the development 
 
 ## License
 
-This extension is licensed under the [MIT License](LICENSE).
+This extension is licensed under the MIT License.

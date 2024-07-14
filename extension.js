@@ -50,12 +50,17 @@ function activate(context) {
   let disposable = vscode.commands.registerCommand(
     "start.bootProject",
     function () {
+      // console.log("Starting....")
       const activeEditor = vscode.window.activeTextEditor;
       if (activeEditor) {
-        parseStartFile(path.dirname(activeEditor.document.uri.fsPath));
+        // console.log("Acitve Editor URI :: ", activeEditor.document.uri)
+        const workspaceRoot = vscode.workspace.getWorkspaceFolder(activeEditor.document.uri);
+        // parseStartFile(path.dirname(activeEditor.document.uri.fsPath));
+        // console.log("Workspace root :: ", workspaceRoot, ", Path :: ", workspaceRoot.uri.fsPath);
+        parseStartFile(workspaceRoot.uri.fsPath);
       } else {
         vscode.window.showInformationMessage("No active editor found.");
-      }
+      } 
     }
   );
 
