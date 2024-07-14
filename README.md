@@ -34,7 +34,7 @@ This extension does not have any configurable options at the moment.
 
 ## Feedback and Contributions
 
-If you have any feedback, suggestions, or want to contribute to the development of this extension, please visit the [GitHub repository](https://github.com/Equibre/.start.git).
+If you have any feedback, suggestions, or want to contribute to the development of this extension, please visit the [GitHub repository](https://github.com/ashusharmadev/.start.git).
 
 ## License
 
