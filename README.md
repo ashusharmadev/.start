@@ -1,8 +1,9 @@
-# Start (.start)
 
 <p align="center">
   <img src="./logo.png" alt="Logo" width="120"/>
 </p>
+
+<h1 align="center">Start (.start)</h1>
 
 This is a Visual Studio Code (VSCode) extension that automatically starts your project by running commands specified in a `.start` file in the project root folder.
 
