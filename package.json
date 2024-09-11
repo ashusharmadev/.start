@@ -2,7 +2,7 @@
   "name": "start",
   "displayName": "start",
   "description": "Start working on your project as soon the vscode get opened.",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/ashusharmadev/.start.git"
