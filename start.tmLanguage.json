@@ -1,0 +1,67 @@
+{
+    "scopeName": "source.start",
+    "patterns": [
+      {
+        "name": "meta.terminal.new",
+        "match": "\\\\t\\b"
+      },
+      {
+        "name": "comment.line",
+        "match": "\\\\c.*$"
+      },
+      {
+        "name": "keyword.command",
+        "match": "\\b(cd|npm|yarn|docker|git|export|npx|env|start|run|build|install|up|down)\\b"
+      },
+      {
+        "name": "constant.other.argument",
+        "match": "\\b([a-zA-Z0-9:_-]+(?:=[^,]*)?)\\b"
+      },
+      {
+        "name": "constant.other.path",
+        "match": "\\b(server|web|src|config|app|build|localhost|api)\\b"
+      },
+      {
+        "name": "punctuation.separator",
+        "match": "[,;&&|]"
+      },
+      {
+        "name": "string.quoted",
+        "begin": "\"",
+        "end": "\"",
+        "patterns": [
+          {
+            "include": "#escaped_characters"
+          }
+        ]
+      },
+      {
+        "name": "string.quoted",
+        "begin": "'",
+        "end": "'",
+        "patterns": [
+          {
+            "include": "#escaped_characters"
+          }
+        ]
+      },
+      {
+        "name": "constant.other.environment",
+        "match": "\\b([A-Z_][A-Z0-9_]*=[^,]*)\\b"
+      },
+      {
+        "name": "constant.other.command",
+        "match": "\\b([a-zA-Z0-9_/:.-]+)\\b"
+      }
+    ],
+    "repository": {
+      "escaped_characters": {
+        "patterns": [
+          {
+            "name": "constant.character.escape",
+            "match": "\\\\."
+          }
+        ]
+      }
+    }
+  }

@@ -2,7 +2,7 @@
   "name": "start",
   "displayName": "start",
   "description": "Start working on your project as soon the vscode get opened.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/ashusharmadev/.start.git"
@@ -18,10 +18,35 @@
   "main": "./extension.js",
   "icon": "logo.png",
   "contributes": {
-    "commands": [{
-      "command": "start.bootProject",
-      "title": "Boot .start"
-    }]
+    "commands": [
+      {
+        "command": "start.bootProject",
+        "title": "Start projects"
+      }
+    ],
+    "languages": [
+      {
+        "id": "start",
+        "extensions": [".start"],
+        "aliases": ["Start File"],
+        "filenames": [".start*"],
+        "filenamePatterns": [
+          ".start*"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "icon.svg",
+          "dark": "icon.svg"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "start",
+        "scopeName": "source.start",
+        "path": "./start.tmLanguage.json"
+      }
+    ]
   },
   "scripts": {
     "lint": "eslint .",
