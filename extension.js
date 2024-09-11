@@ -7,13 +7,27 @@ function getBasePath(filePath) {
   let paths = filePath.split("/");
   paths.splice(paths.length - 1, 1);
   basePath = paths.join("/");
-  return basePath;
+  let name = null;
+  if(paths.length > 0) {
+    name = paths[paths.length-1];
+  }
+  return {
+    basePath: basePath,
+    terminalName: name
+  };
 }
 
+
 function executeCommands(filePath, commands) {
-  const basePath = getBasePath(filePath);
+  const {basePath, terminalName} = getBasePath(filePath);
   for (const commandGroup of commands) {
-    const terminal = vscode.window.createTerminal();
+    let params = {}
+    if(terminalName && terminalName.length > 0) {
+      params = {
+        name: terminalName
+      }
+    }
+    const terminal = vscode.window.createTerminal(params);
     terminal.sendText(`cd ${basePath}`);
     for (const command of commandGroup) {
       terminal.sendText(command);
@@ -91,7 +105,7 @@ function searchStartFiles(rootFolder, autoRun) {
 
         return {
           label: `Open ${(commandSuffix || "").trim().length > 0 ? commandSuffix.trim() : fileName}`,
-          description: `Open ${fileName}`,
+          description: `${file.fsPath}`,
           commandId: commandId,
           filePath: file.fsPath,
           isDefault: isDefault
