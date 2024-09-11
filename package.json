@@ -37,7 +37,7 @@
         "filenamePatterns": [
           ".start*"
         ],
-        "configuration": "./language-configuration.json",
+        "configuration": "./start.tmLanguage.json",
         "icon": {
           "light": "icon.svg",
           "dark": "icon.svg"
