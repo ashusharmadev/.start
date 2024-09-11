@@ -5,7 +5,7 @@ const path = require("path");
 function getBasePath(filePath) {
   let basePath = './';
   let paths = filePath.split("/");
-  paths.splice(paths.length-1, 1);
+  paths.splice(paths.length - 1, 1);
   basePath = paths.join("/");
   return basePath;
 }
@@ -22,75 +22,6 @@ function executeCommands(filePath, commands) {
   }
 }
 
-
-function getWebviewContent() {
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Custom Tab</title>
-  <style>
-    body {
-      display: flex;
-      height: 100vh;
-      margin: 0;
-      color: var(--vscode-editor-foreground);
-      background-color: var(--vscode-editor-background);
-    }
-    #sidebar {
-      width: 200px;
-      background: var(--vscode-sideBar-background);
-      color: var(--vscode-sideBar-foreground);
-      padding: 10px;
-    }
-    #content {
-      flex: 1;
-      padding: 10px;
-      background-color: var(--vscode-editor-background);
-      color: var(--vscode-editor-foreground);
-    }
-    h1, h3 {
-      color: var(--vscode-editor-foreground);
-    }
-    ul {
-      padding: 0;
-      list-style: none;
-    }
-    li {
-      margin: 5px 0;
-    }
-  </style>
-</head>
-<body>
-  <div id="sidebar">
-    <h3>Sidebar</h3>
-    <ul>
-      <li>Item 1</li>
-      <li>Item 2</li>
-      <li>Item 3</li>
-    </ul>
-  </div>
-  <div id="content">
-    <h1>Content Area</h1>
-    <p>Here is the main content area.</p>
-  </div>
-  <script>
-    const vscode = acquireVsCodeApi();
-
-    window.addEventListener('message', event => {
-      const message = event.data;
-      if (message.type === 'updateTheme') {
-        document.body.style.setProperty('--vscode-editor-foreground', message.theme.editorForeground);
-        document.body.style.setProperty('--vscode-editor-background', message.theme.editorBackground);
-        document.body.style.setProperty('--vscode-sideBar-background', message.theme.sideBarBackground);
-        document.body.style.setProperty('--vscode-sideBar-foreground', message.theme.sideBarForeground);
-      }
-    });
-  </script>
-</body>
-</html>`;
-}
 
 function parseStartFile(startFilePath) {
   fs.readFile(startFilePath, 'utf8', (err, data) => {
@@ -109,7 +40,7 @@ function parseStartFile(startFilePath) {
           .map((cmd) => cmd.trim())
       );
 
-    const filteredCommands = commands.filter(commandGroup => 
+    const filteredCommands = commands.filter(commandGroup =>
       commandGroup.every(cmd => !cmd.startsWith('\\c') && !cmd.startsWith('\\d'))
     );
 
@@ -129,10 +60,10 @@ function getWorkspaceRoot() {
 function searchStartFiles(rootFolder, autoRun) {
   vscode.workspace.findFiles('**/.start*', '**/node_modules/**', 10).then(files => {
     if (files.length > 0) {
-      
+
       let was_default_found = false;
       let default_start = {};
-      
+
       const commandItems = files.map(file => {
         const fileName = path.basename(file.fsPath);
         const commandSuffix = fileName.substring('.start'.length); // Extract string after .start
@@ -147,7 +78,7 @@ function searchStartFiles(rootFolder, autoRun) {
           console.error(`Error reading file ${file.fsPath}: ${error}`);
         }
 
-        if(isDefault && !was_default_found) {
+        if (isDefault && !was_default_found) {
           was_default_found = true;
           default_start = {
             label: `Open ${(commandSuffix || "").trim().length > 0 ? commandSuffix.trim() : fileName}`,
@@ -171,11 +102,10 @@ function searchStartFiles(rootFolder, autoRun) {
         parseStartFile(commandItems[0].filePath);
       }
       else {
-        if(was_default_found && autoRun && default_start) {
+        if (was_default_found && autoRun && default_start) {
           parseStartFile(default_start.filePath);
         }
-        else
-        {
+        else {
           vscode.window.showQuickPick(commandItems, {
             placeHolder: 'Select a .start file to open'
           }).then(selected => {
@@ -216,7 +146,6 @@ function activate(context) {
 
   context.subscriptions.push(disposable);
 
-  // context.subscriptions.push(
   //   vscode.commands.registerCommand('start.openMainView', () => {
   //     const panel = vscode.window.createWebviewPanel(
   //       'myCustomTab', // Identifies the type of the webview. Used internally
