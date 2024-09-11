@@ -82,29 +82,31 @@ function getWebviewContent() {
 </html>`;
 }
 
-
 function parseStartFile(startFilePath) {
-  fs.readFile(startFilePath, "utf8", (err, data) => {
+  fs.readFile(startFilePath, 'utf8', (err, data) => {
     if (err) {
-      vscode.window.showErrorMessage(
-        "Can't locate provided .start file."
-      );
+      vscode.window.showErrorMessage("Can't locate provided .start file.");
       return;
     }
 
     const commands = data
-      .split("\n")
-      .filter((line) => line.startsWith("\\t"))
+      .split('\n')
+      .filter((line) => line.startsWith('\\t'))
       .map((line) =>
         line
           .slice(3)
-          .split(",")
+          .split(',')
           .map((cmd) => cmd.trim())
       );
 
-    executeCommands(commands);
+    const filteredCommands = commands.filter(commandGroup => 
+      commandGroup.every(cmd => !cmd.startsWith('\\c') && !cmd.startsWith('\\d'))
+    );
+
+    executeCommands(filteredCommands);
   });
 }
+
 
 function getWorkspaceRoot() {
   const workspaceFolders = vscode.workspace.workspaceFolders;
@@ -114,19 +116,44 @@ function getWorkspaceRoot() {
   return null;
 }
 
-function searchStartFiles(rootFolder) {
+function searchStartFiles(rootFolder, autoRun) {
   vscode.workspace.findFiles('**/.start*', '**/node_modules/**', 10).then(files => {
     if (files.length > 0) {
+      
+      let was_default_found = false;
+      let default_start = {};
+      
       const commandItems = files.map(file => {
         const fileName = path.basename(file.fsPath);
         const commandSuffix = fileName.substring('.start'.length); // Extract string after .start
         const commandId = `extension.openStart${commandSuffix}`;
+        let isDefault = false;
+        try {
+          const firstLine = fs.readFileSync(file.fsPath, 'utf-8').split('\n')[0];
+          if (firstLine.includes('\\d')) {
+            isDefault = true;
+          }
+        } catch (error) {
+          console.error(`Error reading file ${file.fsPath}: ${error}`);
+        }
+
+        if(isDefault && !was_default_found) {
+          was_default_found = true;
+          default_start = {
+            label: `Open ${(commandSuffix || "").trim().length > 0 ? commandSuffix.trim() : fileName}`,
+            description: `Open ${fileName}`,
+            commandId: commandId,
+            filePath: file.fsPath,
+            isDefault: isDefault
+          }
+        }
 
         return {
           label: `Open ${(commandSuffix || "").trim().length > 0 ? commandSuffix.trim() : fileName}`,
           description: `Open ${fileName}`,
           commandId: commandId,
-          filePath: file.fsPath
+          filePath: file.fsPath,
+          isDefault: isDefault
         };
       });
 
@@ -134,13 +161,19 @@ function searchStartFiles(rootFolder) {
         parseStartFile(commandItems[0].filePath);
       }
       else {
-        vscode.window.showQuickPick(commandItems, {
-          placeHolder: 'Select a .start file to open'
-        }).then(selected => {
-          if (selected) {
-            parseStartFile(selected.filePath);
-          }
-        });
+        if(was_default_found && autoRun && default_start) {
+          parseStartFile(default_start.filePath);
+        }
+        else
+        {
+          vscode.window.showQuickPick(commandItems, {
+            placeHolder: 'Select a .start file to open'
+          }).then(selected => {
+            if (selected) {
+              parseStartFile(selected.filePath);
+            }
+          });
+        }
       }
     } else {
       vscode.window.showInformationMessage("No files starting with .start found in the workspace.");
@@ -155,13 +188,21 @@ function activate(context) {
     function () {
       const workspaceRoot = getWorkspaceRoot();
       if (workspaceRoot) {
-        searchStartFiles(workspaceRoot);
+        searchStartFiles(workspaceRoot, false);
       }
       else {
         vscode.window.showInformationMessage("No workspace found.");
       }
     }
   );
+
+  let workspace_root = getWorkspaceRoot();
+  if (workspace_root) {
+    searchStartFiles(workspace_root, true);
+  }
+  else {
+    vscode.window.showInformationMessage("No workspace found.");
+  }
 
   context.subscriptions.push(disposable);
 

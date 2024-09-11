@@ -14,7 +14,11 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished",
+    "onDidOpenTextDocument",
+    "workspaceContains:.start"
+  ],
   "main": "./extension.js",
   "icon": "logo.png",
   "contributes": {
