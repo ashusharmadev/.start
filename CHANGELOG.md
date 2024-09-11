@@ -13,3 +13,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## 0.0.2
 
 - Added support to parse for multiple .start file
+
+## 0.0.3
+
+- Added support for auto start projects when vscode starts
+- Added icons for .start and .start[....] files
+- Added grammar syntax for .start and .start[....] files
+- Change command name from "Boot .start" to "Start projects"
+- Changed logo
