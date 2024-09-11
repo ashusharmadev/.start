@@ -2,9 +2,19 @@ const vscode = require('vscode');
 const fs = require("fs");
 const path = require("path");
 
-function executeCommands(commands) {
+function getBasePath(filePath) {
+  let basePath = './';
+  let paths = filePath.split("/");
+  paths.splice(paths.length-1, 1);
+  basePath = paths.join("/");
+  return basePath;
+}
+
+function executeCommands(filePath, commands) {
+  const basePath = getBasePath(filePath);
   for (const commandGroup of commands) {
     const terminal = vscode.window.createTerminal();
+    terminal.sendText(`cd ${basePath}`);
     for (const command of commandGroup) {
       terminal.sendText(command);
     }
@@ -103,7 +113,7 @@ function parseStartFile(startFilePath) {
       commandGroup.every(cmd => !cmd.startsWith('\\c') && !cmd.startsWith('\\d'))
     );
 
-    executeCommands(filteredCommands);
+    executeCommands(startFilePath, filteredCommands);
   });
 }
 
