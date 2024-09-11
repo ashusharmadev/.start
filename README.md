@@ -1,24 +1,28 @@
-# Auto Project Starter (.start)
+# Start (.start)
+
+<p align="center">
+  <img src="./logo.png" alt="Logo" width="200"/>
+</p>
 
 This is a Visual Studio Code (VSCode) extension that automatically starts your project by running commands specified in a `.start` file in the project root folder.
 
 ## Features
 
-- Automatically creates new terminals and runs the commands specified in the `.start` file whenever you run the `Boot .start` command.
+- Automatically creates new terminals and runs the commands specified in the `.start` file whenever you run the `Start projects` command.
 - Supports multiple commands separated by commas, with each command running in a new terminal.
 - Provides an easy way to set up and start your project without having to manually run the same commands every time.
 
 ## Installation
 
-1. Open the VSCode Extension Marketplace by pressing `Ctrl+Shift+X` (Windows/Linux) or `Cmd+Shift+X` (Mac).
-2. Search for "Auto Project Starter" and click on the "Install" button.
-3. Once the extension is installed, restart VSCode.
+1. Open the VSCode Extension Marketplace by pressing `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (Mac).
+2. Search for "start" and click on the "Install" button.
+3. Once the extension is installed, you can start using it.
 
 ## Usage
 
 1. Create a `.start` file in the root folder of your project or you can create multiple .startYourProjectName files.
 2. In the `.start` or `.startYourProjectName` files, add the commands you want to run, with each command on a new line, prefixed with `\t`. For example: `\t cd server, source venv/bin/activate, python app.py`
-3. Open the project in VSCode, and press `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (Mac) and then choose `Boot .start` or `Boot .startYourProjectName` command to start it.
+3. Open the project in VSCode, and press `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (Mac) and then choose `Start projects` command to start it.
 
 ## Example `.start` file
 
