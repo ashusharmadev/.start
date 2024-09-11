@@ -21,3 +21,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Added grammar syntax for .start and .start[....] files
 - Change command name from "Boot .start" to "Start projects"
 - Changed logo
+
+## 0.0.4
+
+- Added support to auto navigate to path of the .start file
+- Added support to name opened terminals on base folder name
+- Other fixes
